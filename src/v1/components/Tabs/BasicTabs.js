@@ -1,34 +1,38 @@
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { Box, Tabs, Tab, Badge } from "@mui/material";
 
 import TabPanel from "./TabPanel";
 
 const BasicTabs = (props) => {
   const { tabs, formikProps } = props;
-  const [value, setValue] = useState(0);
+  const [currentTab, setCurrentTab] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const handleChangeTab = useCallback((_, newValue) => {
+    setCurrentTab(newValue);
+  }, []);
 
-  function a11yProps(index) {
-    return {
+  const a11yProps = useCallback(
+    (index) => ({
       id: `simple-tab-${index}`,
       "aria-controls": `simple-tabpanel-${index}`,
-    };
-  }
+    }),
+    []
+  );
 
-  function countErrorsInEachTab(tabLabel) {
-    if (!formikProps?.errors[tabLabel]) return;
-    return Object.values(formikProps?.errors[tabLabel]).length;
-  }
+  const countErrorsInEachTab = useCallback(
+    (tabLabel) => {
+      if (!formikProps?.errors[tabLabel]) return;
+      return Object.values(formikProps?.errors[tabLabel]).length;
+    },
+    [formikProps?.errors]
+  );
 
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
-          value={value}
-          onChange={handleChange}
+          value={currentTab}
+          onChange={handleChangeTab}
           aria-label="basic tabs example"
         >
           {tabs.map((tab, index) => (
@@ -54,7 +58,7 @@ const BasicTabs = (props) => {
         </Tabs>
       </Box>
       {tabs.map((tab, index) => (
-        <TabPanel key={index} value={value} index={index}>
+        <TabPanel key={index} value={currentTab} index={index}>
           {tab?.component}
         </TabPanel>
       ))}
