@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 
 import { Box, Tabs, Tab, Badge } from "@mui/material";
 
-export const TabHeader = memo(({ tabs, stateTab, formikProps }) => {
+export const TabHeader = memo(({ tabs, labels, stateTab, formikProps }) => {
   const [currentTab, setCurrentTab] = stateTab;
 
   const countErrorsInEachTab = useCallback(
@@ -32,7 +32,7 @@ export const TabHeader = memo(({ tabs, stateTab, formikProps }) => {
             aria-controls={`simple-tabpanel-${tab}`}
             label={
               <>
-                <div>{tab}</div>
+                <div>{labels[index]}</div>
                 <Badge
                   badgeContent={countErrorsInEachTab(tab)}
                   color="error"

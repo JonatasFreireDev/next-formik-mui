@@ -16,13 +16,13 @@ export default function Home() {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      <Tab name="tab1">
+      <Tab name="tab1" label="Aba 1">
         <TabContent01 />
       </Tab>
       <Tab name="tab2">
         <TabContent02 />
       </Tab>
-      <Tab name="tab3">
+      <Tab name="tab3" label="Aba 3">
         <TabContent03 />
       </Tab>
     </Form>

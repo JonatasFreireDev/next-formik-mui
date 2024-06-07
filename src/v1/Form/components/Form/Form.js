@@ -5,15 +5,28 @@ import { Box } from "@mui/material";
 export const Form = ({ formikProps, children }) => {
   const stateTab = useState(0);
 
-  const tabs = useMemo(() => {
+  const [tabs, labels] = useMemo(() => {
     return React.Children.toArray(children)
       .filter(React.isValidElement)
-      .map((child) => child.props.name);
+      .reduce(
+        (acc, child) => {
+          acc[0].push(child.props.name);
+          acc[1].push(child.props.label ?? child.props.name);
+
+          return acc;
+        },
+        [[], []]
+      );
   }, [children]);
 
   return (
     <Box sx={{ width: "100%" }}>
-      <TabHeader tabs={tabs} stateTab={stateTab} formikProps={formikProps} />
+      <TabHeader
+        tabs={tabs}
+        labels={labels}
+        stateTab={stateTab}
+        formikProps={formikProps}
+      />
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {
