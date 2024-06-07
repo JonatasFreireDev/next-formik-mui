@@ -1,25 +1,19 @@
-import React, { memo, useEffect } from "react";
+import React, { memo } from "react";
 
 import { TextField as TextFieldMui, Grid } from "@mui/material";
-import { getIn } from "formik";
+import { getIn, Field } from "formik";
 
-const TextField = ({ field, form, handleChange, handleBlur, ...rest }) => {
+const TextFieldBase = ({ field, form, handleChange, handleBlur, ...rest }) => {
   const { onChange, onBlur } = field;
-
-  useEffect(() => {
-    if (form.isValidating && field.value === "") {
-      form.setFieldError(field.name);
-    }
-  }, [form, field]);
 
   return (
     <Grid item>
       <TextFieldMui
         id={field.name}
         variant="standard"
-        error={
+        error={Boolean(
           getIn(form.touched, field.name) && getIn(form.errors, field.name)
-        }
+        )}
         helperText={
           getIn(form.touched, field.name) && getIn(form.errors, field.name)
         }
@@ -40,4 +34,8 @@ const TextField = ({ field, form, handleChange, handleBlur, ...rest }) => {
   );
 };
 
-export default memo(TextField);
+export const TextField = memo(({ tabname, name, ...rest }) => (
+  <Field name={tabname + "." + name} {...rest} component={TextFieldBase} />
+));
+
+TextField.displayName = "TextField";
